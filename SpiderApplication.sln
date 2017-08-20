@@ -1,0 +1,65 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiderConsole", "SpiderConsole\SpiderConsole.csproj", "{E0C3798A-249D-4C50-B596-8F8FE90B3930}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Spider", "Spider", "{7A72853A-F54E-4140-A32F-ACA06F68CBAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiderTeste3", "SpiderTeste3\SpiderTeste3.csproj", "{3713296E-2E48-4C2A-82AC-BF33F3FEA41B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiderDefault", "SpiderDefault\SpiderDefault.csproj", "{EC20279C-D87D-4F70-9FD7-61B332FB42EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiderTeste1", "SpiderTeste1\SpiderTeste1.csproj", "{F317DB06-9332-4BBC-B723-DB599369CFF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiderTeste2", "SpiderTeste2\SpiderTeste2.csproj", "{EA5BCD30-42F4-4AB3-9599-1841DB3D40DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helper", "Helper\Helper.csproj", "{7F203C44-5C05-49A6-8F6C-F9047692F737}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CentralManager", "CentralManager\CentralManager.csproj", "{99A56844-FF39-452C-9A82-6327DDD2255C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E0C3798A-249D-4C50-B596-8F8FE90B3930}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0C3798A-249D-4C50-B596-8F8FE90B3930}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0C3798A-249D-4C50-B596-8F8FE90B3930}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0C3798A-249D-4C50-B596-8F8FE90B3930}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3713296E-2E48-4C2A-82AC-BF33F3FEA41B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3713296E-2E48-4C2A-82AC-BF33F3FEA41B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3713296E-2E48-4C2A-82AC-BF33F3FEA41B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3713296E-2E48-4C2A-82AC-BF33F3FEA41B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC20279C-D87D-4F70-9FD7-61B332FB42EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC20279C-D87D-4F70-9FD7-61B332FB42EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC20279C-D87D-4F70-9FD7-61B332FB42EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC20279C-D87D-4F70-9FD7-61B332FB42EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F317DB06-9332-4BBC-B723-DB599369CFF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F317DB06-9332-4BBC-B723-DB599369CFF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F317DB06-9332-4BBC-B723-DB599369CFF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F317DB06-9332-4BBC-B723-DB599369CFF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA5BCD30-42F4-4AB3-9599-1841DB3D40DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA5BCD30-42F4-4AB3-9599-1841DB3D40DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA5BCD30-42F4-4AB3-9599-1841DB3D40DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA5BCD30-42F4-4AB3-9599-1841DB3D40DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F203C44-5C05-49A6-8F6C-F9047692F737}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F203C44-5C05-49A6-8F6C-F9047692F737}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F203C44-5C05-49A6-8F6C-F9047692F737}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F203C44-5C05-49A6-8F6C-F9047692F737}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99A56844-FF39-452C-9A82-6327DDD2255C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99A56844-FF39-452C-9A82-6327DDD2255C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99A56844-FF39-452C-9A82-6327DDD2255C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99A56844-FF39-452C-9A82-6327DDD2255C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3713296E-2E48-4C2A-82AC-BF33F3FEA41B} = {7A72853A-F54E-4140-A32F-ACA06F68CBAE}
+		{F317DB06-9332-4BBC-B723-DB599369CFF4} = {7A72853A-F54E-4140-A32F-ACA06F68CBAE}
+		{EA5BCD30-42F4-4AB3-9599-1841DB3D40DA} = {7A72853A-F54E-4140-A32F-ACA06F68CBAE}
+	EndGlobalSection
+EndGlobal
