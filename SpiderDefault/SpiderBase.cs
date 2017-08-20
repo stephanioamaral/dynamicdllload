@@ -112,7 +112,7 @@ namespace SpiderDefault
 
         public string GetStatus()
         {
-            return "teste";
+            return $@"ID: {ID}, Status: {Running}, Mode: {Mode}, Wait: {Wait}, Thread Number: {ThreadNumber}, Threads Running: {TaskList.Count()}";
         }
 
         private void RunBatch()

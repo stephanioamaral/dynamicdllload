@@ -1,4 +1,5 @@
 ﻿using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,27 @@ namespace CentralManager
             {
                 using (var channel = connection.CreateModel())
                 {
+                    var corrId = Guid.NewGuid().ToString();
+                    var props = channel.CreateBasicProperties();
+                    var replyQueueName = channel.QueueDeclare("spider_manager_callback").QueueName;
+
+                    props.ReplyTo = replyQueueName;
+                    props.CorrelationId = corrId;
+
                     channel.ExchangeDeclare(exchange: "spider_manager",
                                    type: "topic");
+
+                    var consumer = new EventingBasicConsumer(channel);
+                    channel.BasicConsume(queue: replyQueueName,
+                                         autoAck: true,
+                                         consumer: consumer);
+
+                    consumer.Received += (model, ea) =>
+                    {
+                        var received = ea.Body;
+                        var message = Encoding.UTF8.GetString(received);
+                        Console.WriteLine(" [x] Received '{0}'", message);
+                    };
 
                     while (true)
                     {
@@ -35,9 +55,9 @@ namespace CentralManager
 
                         channel.BasicPublish(exchange: "spider_manager",
                                 routingKey: routingKey,
-                                basicProperties: null,
+                                basicProperties: props,
                                 body: body);
-
+                       
                         Console.WriteLine(" [x] Sent '{0}':'{1}'", routingKey, line);
                     }
                 }

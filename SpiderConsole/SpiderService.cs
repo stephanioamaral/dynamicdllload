@@ -1,4 +1,5 @@
 ﻿using Helper;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using SpiderDefault;
@@ -260,17 +261,34 @@ namespace SpiderConsole
                 var body = ea.Body;
                 var message = Encoding.UTF8.GetString(body);
                 var routingKey = ea.RoutingKey;
+
                 logger.Info($"Command Received '{routingKey}':'{message}'");
-                ProcessedCommand(message);
+
+                string response = ProcessedCommand(message);
+
+                CentralManagerConnectionCallBack(ea, response);
             };
 
             RabbitChannel.BasicConsume(queue: queueName,
-                                     autoAck: true,
-                                     consumer: consumer);
+                                       autoAck: true,
+                                       consumer: consumer);
         }
 
-        private void ProcessedCommand(string command)
+        private void CentralManagerConnectionCallBack(BasicDeliverEventArgs ea, string response)
         {
+            var props = ea.BasicProperties;
+            var replyProps = RabbitChannel.CreateBasicProperties();
+            replyProps.CorrelationId = props.CorrelationId;
+
+            var responseBytes = Encoding.UTF8.GetBytes(response);
+
+            RabbitChannel.BasicPublish(exchange: "", routingKey: props.ReplyTo, basicProperties: replyProps, body: responseBytes);
+            //RabbitChannel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+        }
+
+        private string ProcessedCommand(string command)
+        {
+            string retorno = "";
             var split = command.Split(' ');
 
             try
@@ -283,6 +301,8 @@ namespace SpiderConsole
                             StopSpiders();
                         else
                             StopSpider(split[1]);
+
+                        retorno = "Spider stopped";
                     }
                     else if (split[0].ToUpper() == "START")
                     {
@@ -290,6 +310,8 @@ namespace SpiderConsole
                             StartSpiders();
                         else
                             StartSpider(split[1]);
+
+                        retorno = "Spider started";
                     }
                     else if (split[0].ToUpper() == "RESTART")
                     {
@@ -297,6 +319,8 @@ namespace SpiderConsole
                             RestartSpiders();
                         else
                             RestartSpider(split[1]);
+
+                        retorno = "Spider restarted";
                     }
                     else if (split[0].ToUpper() == "THREAD")
                     {
@@ -304,6 +328,8 @@ namespace SpiderConsole
                             AlterThreadNumerSpiders(split[2]);
                         else
                             AlterThreadNumerSpider(split[1], split[2]);
+
+                        retorno = "Spider thread number changed";
                     }
                     else if (split[0].ToUpper() == "WAIT")
                     {
@@ -311,6 +337,8 @@ namespace SpiderConsole
                             AlterWaitSpiders(split[2]);
                         else
                             AlterWaitSpider(split[1], split[2]);
+
+                        retorno = "Spider wait changed";
                     }
                     else if (split[0].ToUpper() == "NUMBER")
                     {
@@ -318,6 +346,8 @@ namespace SpiderConsole
                             AlterNumberSpiders(split[2]);
                         else
                             AlterNumberSpider(split[1], split[2]);
+
+                        retorno = "Spider number changed";
                     }
                     else if (split[0].ToUpper() == "MODE")
                     {
@@ -325,27 +355,38 @@ namespace SpiderConsole
                             AlterModeSpiders(split[2]);
                         else
                             AlterModeSpider(split[1], split[2]);
+
+                        retorno = "Spider mode changed";
                     }
                     else if (split[0].ToUpper() == "RELOAD")
                     {
                         StartSpiders();
+                        retorno = "DLLs reloaded";
                     }
                     else if (split[0].ToUpper() == "STATUS")
                     {
                         List<string> list = GetStatusSpiders();
+                        retorno = JsonConvert.SerializeObject(list);
                     }
                     else
                     {
                         logger.Info($"Command not implemented: {command}");
+                        retorno = "Command not implemented";
                     }
                 }
                 else
+                {
                     logger.Info($"Command not valid: {command}");
+                    retorno = "Command not valid";
+                }
             }
             catch (Exception)
             {
                 logger.Error($"Command error: {command}");
+                retorno = "Command error";
             }
+
+            return retorno;
         }
     }
 }
