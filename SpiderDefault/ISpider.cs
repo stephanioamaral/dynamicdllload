@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SpiderDefault
 {
@@ -8,6 +9,9 @@ namespace SpiderDefault
 
         bool AutoStart { get; }
         bool Running { get; set; }
+        DateTime StartDate { get; set; }
+        long ProcessedItens { get; set; }
+        TimeSpan ProcessedTime { get; set; }
         SpiderMode Mode { get; set; }
 
         int ThreadNumber { get; set; }

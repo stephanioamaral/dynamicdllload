@@ -1,6 +1,7 @@
 ﻿using Helper;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,6 +18,9 @@ namespace SpiderDefault
         public SpiderMode Mode { get; set; }
 
         public abstract string ID { get; }
+        public DateTime StartDate { get; set; }
+        public long ProcessedItens { get; set; }
+        public TimeSpan ProcessedTime { get; set; }
 
         private CancellationTokenSource Token;
         private SafeList<Tuple<Task, CancellationTokenSource>> TaskList = new SafeList<Tuple<Task, CancellationTokenSource>>();
@@ -30,6 +34,9 @@ namespace SpiderDefault
             MaxItemProcessing = 10;
             Running = false;
             Mode = SpiderMode.All;
+            ProcessedTime = TimeSpan.Zero;
+            ProcessedItens = 0;
+            StartDate = DateTime.Now;
             logger = new Log("SpiderBase");
         }
 
@@ -61,7 +68,7 @@ namespace SpiderDefault
                         else if (Mode == SpiderMode.BatchOnly)
                             RunBatch();
                         else if (Mode == SpiderMode.JobOnly)
-                            RunJob();              
+                            RunJob();
 
                         Thread.Sleep(Wait);
                     }
@@ -112,7 +119,7 @@ namespace SpiderDefault
 
         public string GetStatus()
         {
-            return $@"ID: {ID}, Status: {Running}, Mode: {Mode}, Wait: {Wait}, Thread Number: {ThreadNumber}, Threads Running: {TaskList.Count()}";
+            return $@"ID: {ID}, StartTime: {StartDate.ToString()},Status: {Running}, Mode: {Mode}, Wait: {Wait}, Thread Number: {ThreadNumber}, Threads Running: {TaskList.Count()}, Average Time: {ProcessedTime.ToString("mm':'ss':'fff")}, Processed Itens: {string.Format("{0:0}", ProcessedItens)}";
         }
 
         private void RunBatch()
@@ -128,10 +135,19 @@ namespace SpiderDefault
 
                 Task t = Task.Factory.StartNew(() =>
                 {
+                    int count = 0;
+
+                    Stopwatch watch = Stopwatch.StartNew();
+
                     foreach (var item in Capture(null))
                     {
+                        Thread.Sleep(1200);
+                        count++;
                         token.ThrowIfCancellationRequested();
                     }
+
+                    watch.Stop();
+                    UpdateStatistics(watch.Elapsed, count);
                 }, token);
 
                 Tuple<Task, CancellationTokenSource> tuple = Tuple.Create<Task, CancellationTokenSource>(t, source);
@@ -144,7 +160,7 @@ namespace SpiderDefault
         {
             long[] jobsID = new long[] { 1, 2 };
 
-            foreach(long jobID in jobsID)
+            foreach (long jobID in jobsID)
             {
                 TaskList.Remove(p => p.Item1 != null && (p.Item1.IsCompleted || p.Item1.IsCanceled || p.Item1.IsFaulted));
 
@@ -158,15 +174,46 @@ namespace SpiderDefault
 
                 Task t = Task.Factory.StartNew(() =>
                 {
+                    int count = 0;
+
+                    Stopwatch watch = Stopwatch.StartNew();
+
                     foreach (var item in Capture(jobID))
                     {
+                        Thread.Sleep(1000);
+                        count++;
                         token.ThrowIfCancellationRequested();
                     }
+
+                    watch.Stop();
+                    UpdateStatistics(watch.Elapsed, count);
                 }, token);
 
                 Tuple<Task, CancellationTokenSource> tuple = Tuple.Create<Task, CancellationTokenSource>(t, source);
 
                 TaskList.Add(tuple);
+            }
+        }
+
+        private object _sync = new object();
+
+        private void UpdateStatistics(TimeSpan time, int itens)
+        {
+            lock (_sync)
+            {
+                var avgTicks = time.Ticks / itens;
+                ProcessedItens += itens;
+
+                if (ProcessedTime == TimeSpan.Zero)
+                {
+                    var avgTimeSpan = new TimeSpan(avgTicks);
+                    ProcessedTime = avgTimeSpan;
+                }
+                else
+                {
+                    var avg = (ProcessedTime.Ticks + avgTicks) / 2;
+                    ProcessedTime = new TimeSpan(avg);
+                }
             }
         }
     }
